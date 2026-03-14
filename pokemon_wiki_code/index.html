@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PokéDex</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="scanlines"></div>
+
+  <div class="container">
+
+    <header class="header">
+      <div class="pokeball-icon">
+        <div class="pb-top"></div>
+        <div class="pb-middle"><div class="pb-button"></div></div>
+        <div class="pb-bottom"></div>
+      </div>
+      <h1 class="title">PokéDex</h1>
+      <p class="subtitle">NATIONAL ENCYCLOPEDIA</p>
+    </header>
+
+    <!-- ===== MODE TAB BAR ===== -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tabPokemon" onclick="switchMode('pokemon')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="6" cy="6" r="1.5" fill="currentColor"/>
+        </svg>
+        POKÉMON
+      </button>
+      <button class="mode-tab" id="tabItem" onclick="switchMode('item')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <rect x="1.5" y="3" width="9" height="7.5" rx="1.2" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M4 3V2.5a2 2 0 0 1 4 0V3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="4" y1="6.5" x2="8" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        ITEMS
+      </button>
+    </div>
+
+    <!-- ===== POKÉMON MODE ===== -->
+    <div id="modePokemon">
+      <div class="search-section">
+        <div class="search-box-wrap">
+          <div class="search-box">
+            <input
+              type="text"
+              id="pokemonName"
+              class="search-input"
+              placeholder="Enter Pokémon name..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="search-btn" onclick="fetchData()">
+              <span class="btn-text">SEARCH</span>
+              <span class="btn-icon">▶</span>
+            </button>
+          </div>
+          <ul class="autocomplete-list" id="autocompleteList"></ul>
+        </div>
+        <div class="search-hint-row">
+          <p class="hint">Try: pikachu, charizard, mewtwo, eevee</p>
+          <button class="random-btn" id="randomBtn" title="Random Pokémon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M1 4h2l1.5-2h5L11 4h1v6H1V4z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" fill="none"/>
+              <circle cx="4.5" cy="7" r="1" fill="currentColor"/>
+              <circle cx="8.5" cy="7" r="1" fill="currentColor"/>
+            </svg>
+            RANDOM
+          </button>
+        </div>
+      </div>
+
+      <div class="card-wrapper">
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-pokeball">?</div>
+          <p>No Pokémon loaded</p>
+          <p class="empty-sub">Search for a Pokémon to begin</p>
+        </div>
+
+        <!-- Skeleton loading card -->
+        <div class="skeleton-card" id="skeletonCard">
+          <div class="card-header">
+            <div class="skel skel-id"></div>
+            <div style="display:flex;gap:6px">
+              <div class="skel skel-badge"></div>
+              <div class="skel skel-badge"></div>
+            </div>
+          </div>
+          <div class="sprite-container">
+            <div class="skel skel-sprite"></div>
+          </div>
+          <div class="pokemon-info">
+            <div class="skel skel-name"></div>
+            <div class="stats-grid">
+              <div class="stat-row" style="gap:10px">
+                <div class="skel skel-stat-label"></div>
+                <div class="skel skel-stat-bar"></div>
+                <div class="skel skel-stat-val"></div>
+              </div>
+              <div class="stat-row" style="gap:10px">
+                <div class="skel skel-stat-label"></div>
+                <div class="skel skel-stat-bar" style="width:55%"></div>
+                <div class="skel skel-stat-val"></div>
+              </div>
+              <div class="stat-row" style="gap:10px">
+                <div class="skel skel-stat-label"></div>
+                <div class="skel skel-stat-bar" style="width:70%"></div>
+                <div class="skel skel-stat-val"></div>
+              </div>
+              <div class="stat-row" style="gap:10px">
+                <div class="skel skel-stat-label"></div>
+                <div class="skel skel-stat-bar" style="width:40%"></div>
+                <div class="skel skel-stat-val"></div>
+              </div>
+            </div>
+            <div class="meta-row" style="padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div class="skel skel-meta-label"></div>
+                <div class="skel skel-meta-val"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div class="skel skel-meta-label"></div>
+                <div class="skel skel-meta-val"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div class="skel skel-meta-label"></div>
+                <div class="skel skel-meta-val"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pokemon Card -->
+        <div class="pokemon-card" id="pokemonCard">
+          <div class="card-header">
+            <span class="pokemon-id" id="pokemonId">#001</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="variant-badge" id="variantBadge" style="display:none"></span>
+              <div class="type-badges" id="typeBadges"></div>
+            </div>
+          </div>
+
+          <div class="sprite-container">
+            <div class="sprite-bg"></div>
+            <img id="pokemonSprite" src="" alt="Pokemon sprite" />
+            <button class="shiny-toggle" id="shinyToggle" title="Toggle shiny sprite">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="7" y1="1"  x2="7"  y2="4"  stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <line x1="7" y1="10" x2="7"  y2="13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <line x1="1" y1="7"  x2="4"  y2="7"  stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <line x1="10" y1="7" x2="13" y2="7"  stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <line x1="2.8" y1="2.8" x2="4.9" y2="4.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="9.1" y1="9.1" x2="11.2" y2="11.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="11.2" y1="2.8" x2="9.1" y2="4.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="4.9" y1="9.1" x2="2.8" y2="11.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <circle cx="7" cy="7" r="2" fill="currentColor"/>
+              </svg>
+              <span class="shiny-label">SHINY</span>
+            </button>
+          </div>
+
+          <div class="pokemon-info">
+            <h2 class="pokemon-name" id="pokemonNameDisplay">BULBASAUR</h2>
+            <div class="abilities-row" id="abilitiesRow"></div>
+            <div class="stats-grid">
+              <div class="stat-row" id="statHP">
+                <span class="stat-label">HP</span>
+                <div class="stat-bar-wrap"><div class="stat-bar" style="width:0%"></div></div>
+                <span class="stat-val">0</span>
+              </div>
+              <div class="stat-row" id="statATK">
+                <span class="stat-label">ATK</span>
+                <div class="stat-bar-wrap"><div class="stat-bar" style="width:0%"></div></div>
+                <span class="stat-val">0</span>
+              </div>
+              <div class="stat-row" id="statDEF">
+                <span class="stat-label">DEF</span>
+                <div class="stat-bar-wrap"><div class="stat-bar" style="width:0%"></div></div>
+                <span class="stat-val">0</span>
+              </div>
+              <div class="stat-row" id="statSPD">
+                <span class="stat-label">SPD</span>
+                <div class="stat-bar-wrap"><div class="stat-bar" style="width:0%"></div></div>
+                <span class="stat-val">0</span>
+              </div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-item">
+                <span class="meta-label">HEIGHT</span>
+                <span class="meta-value" id="pokemonHeight">-</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">WEIGHT</span>
+                <span class="meta-value" id="pokemonWeight">-</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">BASE EXP</span>
+                <span class="meta-value" id="pokemonExp">-</span>
+              </div>
+            </div>
+
+            <!-- Weaknesses -->
+            <div class="weakness-section" id="weaknessSection">
+              <div class="weakness-header">
+                <span class="weakness-title">WEAK TO</span>
+              </div>
+              <div class="weakness-badges" id="weaknessBadges"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evolution Chain -->
+        <div class="evo-panel" id="evoPanel">
+          <div class="evo-header">
+            <h3 class="evo-title">EVOLUTION CHAIN</h3>
+          </div>
+          <div class="evo-body" id="evoBody"></div>
+        </div>
+
+        <!-- Moves Panel -->
+        <div class="moves-panel" id="movesPanel">
+          <div class="moves-header">
+            <h3 class="moves-title">MOVE LEARNSET</h3>
+            <div class="moves-filter-tabs" id="movesFilterTabs"></div>
+          </div>
+          <div class="moves-body" id="movesBody"></div>
+        </div>
+
+        <!-- Locations Panel -->
+        <div class="locations-panel" id="locationsPanel">
+          <div class="locations-header">
+            <h3 class="locations-title">ENCOUNTER LOCATIONS</h3>
+            <div class="locations-game-tabs" id="locationsGameTabs"></div>
+          </div>
+          <div class="locations-body" id="locationsBody"></div>
+        </div>
+
+        <!-- Error state -->
+        <div class="error-state" id="errorState">
+          <div class="error-icon">✕</div>
+          <p>Pokémon not found!</p>
+          <p class="error-sub">Check the name and try again</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ITEM MODE ===== -->
+    <div id="modeItem" style="display:none">
+      <div class="search-section">
+        <div class="search-box-wrap">
+          <div class="search-box">
+            <input
+              type="text"
+              id="itemName"
+              class="search-input"
+              placeholder="Enter item name..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="search-btn" onclick="fetchItem()">
+              <span class="btn-text">SEARCH</span>
+              <span class="btn-icon">▶</span>
+            </button>
+          </div>
+          <ul class="autocomplete-list" id="itemAutocompleteList"></ul>
+        </div>
+        <p class="hint">Try: potion, master-ball, fire-stone, leftovers</p>
+      </div>
+
+      <div class="card-wrapper">
+        <!-- Item empty state -->
+        <div class="empty-state" id="itemEmptyState">
+          <div class="empty-pokeball">?</div>
+          <p>No item loaded</p>
+          <p class="empty-sub">Search for an item to begin</p>
+        </div>
+
+        <!-- Item skeleton -->
+        <div class="skeleton-card" id="itemSkeletonCard" style="display:none">
+          <div class="card-header">
+            <div class="skel skel-id"></div>
+            <div style="display:flex;gap:6px">
+              <div class="skel skel-badge"></div>
+              <div class="skel skel-badge"></div>
+            </div>
+          </div>
+          <div class="sprite-container" style="padding:24px 0 8px">
+            <div class="skel" style="width:96px;height:96px;border-radius:50%"></div>
+          </div>
+          <div class="pokemon-info">
+            <div class="skel skel-name" style="margin:0 auto"></div>
+            <div class="skel" style="width:100%;height:70px;border-radius:8px;margin-top:4px"></div>
+            <div class="skel" style="width:85%;height:18px;border-radius:4px;margin:0 auto"></div>
+            <div class="skel" style="width:70%;height:18px;border-radius:4px;margin:0 auto"></div>
+          </div>
+        </div>
+
+        <!-- Item card -->
+        <div class="pokemon-card" id="itemCard" style="display:none">
+          <div class="card-header">
+            <span class="pokemon-id" id="itemCategory">-</span>
+            <div class="type-badges" id="itemAttributeBadges"></div>
+          </div>
+          <div class="sprite-container" style="padding:20px 0 12px">
+            <div class="sprite-bg" style="width:96px;height:96px"></div>
+            <img id="itemSprite" src="" alt="Item sprite"
+                 style="width:96px;height:96px;image-rendering:pixelated;position:relative;z-index:1;
+                        filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5))" />
+          </div>
+          <div class="pokemon-info">
+            <h2 class="pokemon-name" id="itemNameDisplay">-</h2>
+            <div class="item-fling-row" id="itemFlingRow" style="display:none">
+              <span class="meta-label">FLING POWER</span>
+              <span class="meta-value" id="itemFlingPower">-</span>
+            </div>
+            <div class="item-effect-box" id="itemEffectBox"></div>
+            <p class="item-flavour" id="itemFlavour"></p>
+          </div>
+        </div>
+
+        <!-- Item error -->
+        <div class="error-state" id="itemErrorState" style="display:none">
+          <div class="error-icon">✕</div>
+          <p>Item not found!</p>
+          <p class="error-sub">Check the name and try again</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Move Tooltip -->
+  <div class="move-tooltip" id="moveTooltip">
+    <div class="move-tooltip-inner" id="moveTooltipInner"></div>
+  </div>
+
+  <!-- Ability Modal -->
+  <div class="ability-backdrop" id="abilityBackdrop">
+    <div class="ability-modal" id="abilityModal">
+      <button class="ability-modal-close" id="abilityModalClose">✕</button>
+      <div class="ability-modal-inner" id="abilityModalInner"></div>
+    </div>
+  </div>
+
+  <!-- Item Modal (opened from links within Pokémon view) -->
+  <div class="ability-backdrop" id="itemModalBackdrop">
+    <div class="ability-modal" id="itemModal">
+      <button class="ability-modal-close" id="itemModalClose">✕</button>
+      <div class="ability-modal-inner" id="itemModalInner"></div>
+    </div>
+  </div>
+
+  <!-- Type Chart FAB -->
+  <button class="type-chart-fab" id="typeChartFab" title="Type effectiveness chart">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="7.5" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M9 5v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="9" cy="9" r="1.2" fill="currentColor"/>
+    </svg>
+    <span>TYPE CHART</span>
+  </button>
+
+  <!-- Type Chart Modal -->
+  <div class="ability-backdrop" id="typeChartBackdrop">
+    <div class="type-chart-modal" id="typeChartModal">
+      <div class="type-chart-modal-header">
+        <div>
+          <h2 class="type-chart-modal-title">TYPE CHART</h2>
+          <p class="type-chart-modal-sub">Weaknesses &amp; strengths for each type</p>
+        </div>
+        <button class="ability-modal-close" id="typeChartClose">✕</button>
+      </div>
+      <div class="type-chart-body" id="typeChartBody">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
