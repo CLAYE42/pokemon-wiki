@@ -357,7 +357,6 @@ body {
   white-space: nowrap;
   transition: all 0.15s;
   flex-shrink: 0;
-  margin: 5px;
 }
 
 .random-btn:hover {
@@ -1103,9 +1102,7 @@ body {
 }
 
 .type-chart-modal-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  position: relative;
   padding: 22px 24px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   flex-shrink: 0;
