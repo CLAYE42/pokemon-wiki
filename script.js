@@ -1423,11 +1423,9 @@ async function fetchItem(nameOverride) {
             fetch(`https://pokeapi.co/api/v2/item/${rawName}`),
             sleep(FAKE_LOADING_MS)
         ]);
-
         if (!res.ok) throw new Error("Item not found");
         const data = await res.json();
         itemCache[rawName] = data;
-
         renderItemCard(data);
 
     } catch (err) {
@@ -1451,16 +1449,9 @@ function renderItemCard(data) {
     // Category
     document.getElementById("itemCategory").textContent = fmt(data.category?.name ?? "item");
 
-    // Attribute badges (e.g. holdable, consumable)
+    // Attribute badges removed — category label is sufficient
     const attribEl = document.getElementById("itemAttributeBadges");
     attribEl.innerHTML = "";
-    (data.attributes ?? []).slice(0, 3).forEach(attr => {
-        const badge = document.createElement("span");
-        badge.className   = "type-badge type-normal";
-        badge.textContent = fmt(attr.name);
-        badge.style.cssText = "background:rgba(255,255,255,0.06);color:var(--text-dim);border:1px solid rgba(255,255,255,0.1);font-size:6px;padding:3px 8px";
-        attribEl.appendChild(badge);
-    });
 
     // Fling power
     const flingRow = document.getElementById("itemFlingRow");
@@ -1859,9 +1850,16 @@ setupAutocomplete();
 // Random Pokémon button — picks any of the 1010 main-series Pokémon
 document.getElementById("randomBtn").addEventListener("click", () => {
     const randomId = Math.floor(Math.random() * 1010) + 1;
-    // Find the name from the preloaded list once available, else fall back to ID
     const found = pokemonList.find(p => p.id === randomId);
     const nameOrId = found ? found.name : String(randomId);
     document.getElementById("pokemonName").value = nameOrId;
     fetchData();
+});
+
+// Random Item button — picks from the loaded item list
+document.getElementById("randomItemBtn").addEventListener("click", () => {
+    if (itemList.length === 0) return;
+    const randomItem = itemList[Math.floor(Math.random() * itemList.length)];
+    document.getElementById("itemName").value = randomItem.name;
+    fetchItem(randomItem.name);
 });

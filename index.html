@@ -66,10 +66,15 @@
         <div class="search-hint-row">
           <p class="hint">Try: pikachu, charizard, mewtwo, eevee</p>
           <button class="random-btn" id="randomBtn" title="Random Pokémon">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M1 4h2l1.5-2h5L11 4h1v6H1V4z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" fill="none"/>
-              <circle cx="4.5" cy="7" r="1" fill="currentColor"/>
-              <circle cx="8.5" cy="7" r="1" fill="currentColor"/>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <!-- Dice body -->
+              <rect x="1" y="1" width="12" height="12" rx="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/>
+              <!-- Five dot pattern like a standard dice face showing 5 -->
+              <circle cx="4"  cy="4"  r="1" fill="currentColor"/>
+              <circle cx="10" cy="4"  r="1" fill="currentColor"/>
+              <circle cx="7"  cy="7"  r="1" fill="currentColor"/>
+              <circle cx="4"  cy="10" r="1" fill="currentColor"/>
+              <circle cx="10" cy="10" r="1" fill="currentColor"/>
             </svg>
             RANDOM
           </button>
@@ -271,7 +276,20 @@
           </div>
           <ul class="autocomplete-list" id="itemAutocompleteList"></ul>
         </div>
-        <p class="hint">Try: potion, master-ball, fire-stone, leftovers</p>
+        <div class="search-hint-row">
+          <p class="hint">Try: potion, master-ball, fire-stone, leftovers</p>
+          <button class="random-btn" id="randomItemBtn" title="Random Item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="1" y="1" width="12" height="12" rx="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/>
+              <circle cx="4"  cy="4"  r="1" fill="currentColor"/>
+              <circle cx="10" cy="4"  r="1" fill="currentColor"/>
+              <circle cx="7"  cy="7"  r="1" fill="currentColor"/>
+              <circle cx="4"  cy="10" r="1" fill="currentColor"/>
+              <circle cx="10" cy="10" r="1" fill="currentColor"/>
+            </svg>
+            RANDOM
+          </button>
+        </div>
       </div>
 
       <div class="card-wrapper">
@@ -286,10 +304,6 @@
         <div class="skeleton-card" id="itemSkeletonCard" style="display:none">
           <div class="card-header">
             <div class="skel skel-id"></div>
-            <div style="display:flex;gap:6px">
-              <div class="skel skel-badge"></div>
-              <div class="skel skel-badge"></div>
-            </div>
           </div>
           <div class="sprite-container" style="padding:24px 0 8px">
             <div class="skel" style="width:96px;height:96px;border-radius:50%"></div>
