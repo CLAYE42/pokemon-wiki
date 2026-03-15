@@ -1675,8 +1675,6 @@ let typeChartBuilt = false;
 function openTypeChart() {
     const backdrop = document.getElementById("typeChartBackdrop");
     backdrop.classList.add("open");
-
-    // Build once and cache in the DOM
     if (!typeChartBuilt) {
         buildTypeChart();
         typeChartBuilt = true;
